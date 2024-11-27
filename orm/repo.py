@@ -19,3 +19,21 @@ def foto_por_id(sesion:Session,id_foto:int):
 def compra_por_id(sesion:Session,id_compra:int):
     print("select * from compras where id = id_compra")
     return sesion.query(modelos.Compra).filter(modelos.Compra.id==id_compra).first()
+
+# GET '/usuarios'
+# select * from app.usuarios
+def devuelve_usuarios(sesion:Session):
+    print("select * from app.usuarios")
+    return sesion.query(modelos.Usuario).all()
+
+# GET '/compras'
+# select * from app.compras
+def devuelve_compras(sesion:Session):
+    print("select * from app.compras")
+    return sesion.query(modelos.Compra).all()
+
+# GET '/fotos'
+# select * from app.fotos
+def devuelve_fotos(sesion:Session):
+    print("select * from app.fotos")
+    return sesion.query(modelos.Foto).all()

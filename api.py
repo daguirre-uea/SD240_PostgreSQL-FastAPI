@@ -69,10 +69,13 @@ def usuario_por_id(id:int,sesion:Session=Depends(generador_sesion)):
     return repo.usuario_por_id(sesion, id)
 
 @app.get("/usuarios")
-def lista_usuarios(*,lote:int=10,pag:int,orden:Optional[str]=None): #parametros de consulta ?lote=10&pag=1
-    print("lote:",lote, " pag:", pag, " orden:", orden)
-    #simulamos la consulta
-    return usuarios
+def lista_usuarios(sesion:Session=Depends(generador_sesion)):
+    print("API consultando todos los usuarios")
+    return repo.devuelve_usuarios(sesion)
+#def lista_usuarios(*,lote:int=10,pag:int,orden:Optional[str]=None): #parametros de consulta ?lote=10&pag=1
+#    print("lote:",lote, " pag:", pag, " orden:", orden)
+#    #simulamos la consulta
+#    return usuarios
 
 @app.post("/usuarios")
 def guardar_usuario(usuario:UsuarioBase, parametro1:str):
@@ -119,11 +122,21 @@ def compra_por_id(id:int, sesion:Session=Depends(generador_sesion)):
     print("Buscando compra por id")
     return repo.compra_por_id(sesion, id)
 
+@app.get("/compras")
+def lista_compras(sesion:Session=Depends(generador_sesion)):
+    print("API consultando todos las compras")
+    return repo.devuelve_compras(sesion)
+
 ## Peticiones de fotos
 @app.get("/fotos/{id}")
 def foto_por_id(id:int, sesion:Session=Depends(generador_sesion)):
     print("Buscando foto por id")
     return repo.foto_por_id(sesion,id)
+
+@app.get("/fotos")
+def lista_fotos(sesion:Session=Depends(generador_sesion)):
+    print("API consultando todas las fotos")
+    return repo.devuelve_fotos(sesion)
 
 @app.post("/fotos")
 async def guardar_foto(titulo:str=Form(None), descripcion:str=Form(...), foto:UploadFile=File(...)):
