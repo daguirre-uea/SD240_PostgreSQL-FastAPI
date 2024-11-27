@@ -113,6 +113,18 @@ def borrar_usuario(id:int):
     
     return {"status_borrado", "ok"}
 
+## Peticiones de compras
+@app.get("/compras/{id}")
+def compra_por_id(id:int, sesion:Session=Depends(generador_sesion)):
+    print("Buscando compra por id")
+    return repo.compra_por_id(sesion, id)
+
+## Peticiones de fotos
+@app.get("/fotos/{id}")
+def foto_por_id(id:int, sesion:Session=Depends(generador_sesion)):
+    print("Buscando foto por id")
+    return repo.foto_por_id(sesion,id)
+
 @app.post("/fotos")
 async def guardar_foto(titulo:str=Form(None), descripcion:str=Form(...), foto:UploadFile=File(...)):
     print("titulo:", titulo)
