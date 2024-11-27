@@ -122,10 +122,11 @@ def compra_por_id(id:int, sesion:Session=Depends(generador_sesion)):
     print("Buscando compra por id")
     return repo.compra_por_id(sesion, id)
 
+# "/compras?id_usuario={id_usr}&precio={p}"
 @app.get("/compras")
-def lista_compras(sesion:Session=Depends(generador_sesion)):
-    print("API consultando todos las compras")
-    return repo.devuelve_compras(sesion)
+def lista_compras(id_usuario:int,precio:float,sesion:Session=Depends(generador_sesion)):
+    print("/compras?id_usuario={id_usr}&precio={p}")
+    return repo.devuelve_compras_por_usuario_precio(sesion,id_usuario,precio)
 
 ## Peticiones de fotos
 @app.get("/fotos/{id}")
