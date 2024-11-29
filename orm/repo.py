@@ -10,11 +10,62 @@ def usuario_por_id(sesion:Session,id_usuario:int):
     print("select * from app.usuarios where id = ", id_usuario)
     return sesion.query(modelos.Usuario).filter(modelos.Usuario.id==id_usuario).first()
 
+# Buscar fotos por id de usuario
+# GET '/usuarios/{id}/fotos'
+# select * from app.fotos where id_usuario=id
+def fotos_por_id_usuario(sesion:Session,id_usuario:int):
+    print("select * from app.fotos where id_usuario=", id_usuario)
+    return sesion.query(modelos.Foto).filter(modelos.Foto.id_usuario==id_usuario).all() 
+
+# select * from app.compras where id_usuario=id
+def compras_por_id_usuario(sesion:Session,id_usuario:int):
+    print("select * from app.compras where id_usuario=", id_usuario)
+    return sesion.query(modelos.Compra).filter(modelos.Compra.id_usuario==id_usuario).all() 
+
+# Borra fotos por id de usuario
+# DELETE '/usuarios/{id}/fotos'
+# delete from app.fotos where id_usuario=id
+def borrar_fotos_por_id_usuario(sesion:Session,id_usuario:int):
+    print("delete from app.fotos where id_usuario=",id_usuario)
+    fotos_usr = fotos_por_id_usuario(sesion, id_usuario)
+    if fotos_usr is not None:
+        for foto_usuario in fotos_usr:
+            sesion.delete(foto_usuario)
+        sesion.commit()
+
+# Borra compras por id de usuario
+# DELETE '/usuarios/{id}/compras'
+# delete from app.compras where id_usuario=id
+def borrar_compras_por_id_usuario(sesion:Session,id_usuario:int):
+    print("delete from app.compras where id_usuario=",id_usuario)
+    compras_usr = compras_por_id_usuario(sesion, id_usuario)
+    if compras_usr is not None:
+        for compra_usuario in compras_usr:
+            sesion.delete(compra_usuario)
+        sesion.commit()
+
 # GET '/usuarios'
 # select * from app.usuarios
 def devuelve_usuarios(sesion:Session):
     print("select * from app.usuarios")
     return sesion.query(modelos.Usuario).all()
+
+# DELETE '/usuarios/{id}'
+# delete from app.usuarios where id=id_usuario
+def borra_usuario_por_id(sesion:Session,id_usuario:int):
+    print("delete from app.usuarios where id=", id_usuario)
+    #1.- select para ver si existe el usuario a borrar
+    usr = usuario_por_id(sesion, id_usuario)
+    #2.- Borramos
+    if usr is not None:
+        #Borramos usuario
+        sesion.delete(usr)
+        #Confirmar los cambios
+        sesion.commit()
+    respuesta = {
+        "mensaje": "usuario eliminado"
+    }
+    return respuesta
 
 # ------------ Peticiones a fotos ---------------------
 # GET '/fotos/{id}'

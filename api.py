@@ -68,6 +68,16 @@ def usuario_por_id(id:int,sesion:Session=Depends(generador_sesion)):
     print("Api consultando usuario por id")
     return repo.usuario_por_id(sesion, id)
 
+@app.get("/usuarios/{id}/fotos")
+def fotos_por_id_usr(id:int,sesion:Session=Depends(generador_sesion)):
+    print("API consultando fotos del usuario ", id)
+    return repo.fotos_por_id_usuario(sesion, id)
+
+@app.get("/usuarios/{id}/compras")
+def fotos_por_id_usr(id:int,sesion:Session=Depends(generador_sesion)):
+    print("API consultando compras del usuario ", id)
+    return repo.compras_por_id_usuario(sesion, id)
+
 @app.get("/usuarios")
 def lista_usuarios(sesion:Session=Depends(generador_sesion)):
     print("API consultando todos los usuarios")
@@ -104,17 +114,11 @@ def actualizar_usuario(id:int, usuario:UsuarioBase):
     return usr_act
     
 @app.delete("/usuario/{id}")
-def borrar_usuario(id:int):
-    #simulamos una consulta
-    if id>=0 and id< len(usuarios):
-        usuario = usuarios[id]
-    else:
-        usuario = None
-    
-    if usuario is not None:
-        usuarios.remove(usuario)
-    
-    return {"status_borrado", "ok"}
+def borrar_usuario(id:int, sesion:Session=Depends(generador_sesion)):
+    repo.borrar_compras_por_id_usuario(sesion,id)
+    repo.borrar_fotos_por_id_usuario(sesion,id)
+    repo.borra_usuario_por_id(sesion,id)
+    return {"usuario_borrado", "ok"}
 
 ## Peticiones de compras
 @app.get("/compras/{id}")
