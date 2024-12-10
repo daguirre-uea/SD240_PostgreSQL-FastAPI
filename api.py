@@ -89,19 +89,10 @@ def lista_usuarios(sesion:Session=Depends(generador_sesion)):
 #    return usuarios
 
 @app.post("/usuarios")
-def guardar_usuario(usuario:UsuarioBase, parametro1:str):
-    print("usuario a guardar:", usuario, ", parametro1:", parametro1)
-    #simulamos guardado en la base.
-    
-    usr_nuevo = {}
-    usr_nuevo["id"] = len(usuarios)
-    usr_nuevo["nombre"] = usuario.nombre
-    usr_nuevo["edad"] = usuario.edad
-    usr_nuevo["domicilio"] = usuario.domicilio
-
-    usuarios.append(usuario)
-
-    return usr_nuevo
+def guardar_usuario(usuario:esquemas.UsuarioBase,sesion:Session=Depends(generador_sesion)):
+    print(usuario)
+    #guardado en la base.
+    return repo.guardar_usuario(sesion,usuario)
 
 #@app.put("/compras/{id}")
 #@app.put("/fotos/{id}")
