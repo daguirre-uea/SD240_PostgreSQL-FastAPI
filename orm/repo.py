@@ -1,4 +1,5 @@
 import orm.modelos as modelos
+import orm.esquemas as esquemas
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
@@ -50,13 +51,39 @@ def devuelve_usuarios(sesion:Session):
     print("select * from app.usuarios")
     return sesion.query(modelos.Usuario).all()
 
+#PUT '/usuarios/{id}'
+def actualiza_usuario(sesion:Session,id_usuario:int,usr_esquema:esquemas.UsuarioBase):
+    #1.-Verificar que el usuario existe
+    usr_bd = usuario_por_id(sesion,id_usuario)
+    if usr_bd is not None:
+        #2.- Actualizamos los datos del usuaurio en la BD
+        usr_bd.nombre = usr_esquema.nombre
+        usr_bd.edad = usr_esquema.edad
+        usr_bd.domicilio = usr_esquema.domicilio
+        usr_bd.email = usr_esquema.email
+        usr_bd.password = usr_esquema.password
+        #3.-Confirmamos los cambios
+        sesion.commit()
+        #4.-Refrescar la BD
+        sesion.refresh(usr_bd)
+        #5.-Imprimir los datos nuevos
+        print(usr_esquema)
+        return usr_esquema
+    else:
+        respuesta = {"mensaje":"No existe el usuario"}
+        return respuesta
+
 # DELETE '/usuarios/{id}'
 # delete from app.usuarios where id=id_usuario
 def borra_usuario_por_id(sesion:Session,id_usuario:int):
     print("delete from app.usuarios where id=", id_usuario)
-    #1.- select para ver si existe el usuario a borrar
+    #1.- borro compras del usuario
+    borrar_compras_por_id_usuario(sesion, id_usuario)
+    #2.-borro foto del usuario
+    borrar_fotos_por_id_usuario(sesion, id_usuario)
+    #3.- select para ver si existe el usuario a borrar
     usr = usuario_por_id(sesion, id_usuario)
-    #2.- Borramos
+    #4.- Borramos
     if usr is not None:
         #Borramos usuario
         sesion.delete(usr)

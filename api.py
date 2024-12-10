@@ -5,6 +5,7 @@ import shutil
 import os
 import uuid
 import orm.repo as repo #funciones para hacer consultas a la BD
+import orm.esquemas as esquemas
 from sqlalchemy.orm import Session
 from orm.config import generador_sesion #generador de sesiones
 
@@ -102,21 +103,18 @@ def guardar_usuario(usuario:UsuarioBase, parametro1:str):
 
     return usr_nuevo
 
+#@app.put("/compras/{id}")
+#@app.put("/fotos/{id}")
 @app.put("/usuario/{id}")
-def actualizar_usuario(id:int, usuario:UsuarioBase):
-    #simulamos consulta
-    usr_act = usuarios[id]
-    #simulamos la actualización
-    usr_act["nombre"] = usuario.nombre
-    usr_act["edad"] = usuario.edad
-    usr_act["domicilio"] = usuario.domicilio    
-
-    return usr_act
+def actualizar_usuario(id:int,info_usuario:esquemas.UsuarioBase,sesion:Session=Depends(generador_sesion)):
+    return repo.actualiza_usuario(sesion,id,info_usuario)
     
 @app.delete("/usuario/{id}")
 def borrar_usuario(id:int, sesion:Session=Depends(generador_sesion)):
-    repo.borrar_compras_por_id_usuario(sesion,id)
-    repo.borrar_fotos_por_id_usuario(sesion,id)
+    #1.- borro compras del usuario
+    #repo.borrar_compras_por_id_usuario(sesion,id)
+    #2.-borro foto del usuario
+    #repo.borrar_fotos_por_id_usuario(sesion,id)
     repo.borra_usuario_por_id(sesion,id)
     return {"usuario_borrado", "ok"}
 
