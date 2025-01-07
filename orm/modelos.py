@@ -1,6 +1,6 @@
 # La clase base de las clases modelos
 # los modelos o clases modelo son las clases que mapean a las tablas
-from orm.config import BaseClass
+#from orm.config import BaseClass
 # Importar de SQLALchemy los tipos de datos que usan las columnas de las tablas
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Float
 # declarative_base permite definir la clase base para mapear las tablas de la BD
