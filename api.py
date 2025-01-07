@@ -94,8 +94,6 @@ def guardar_usuario(usuario:esquemas.UsuarioBase,sesion:Session=Depends(generado
     #guardado en la base.
     return repo.guardar_usuario(sesion,usuario)
 
-#@app.put("/compras/{id}")
-#@app.put("/fotos/{id}")
 @app.put("/usuario/{id}")
 def actualizar_usuario(id:int,info_usuario:esquemas.UsuarioBase,sesion:Session=Depends(generador_sesion)):
     return repo.actualiza_usuario(sesion,id,info_usuario)
@@ -108,6 +106,9 @@ def borrar_usuario(id:int, sesion:Session=Depends(generador_sesion)):
     #repo.borrar_fotos_por_id_usuario(sesion,id)
     repo.borra_usuario_por_id(sesion,id)
     return {"usuario_borrado", "ok"}
+
+#@app.post("/usuario/{id}/compras")
+#@app.post("/usuario/{id}/fotos")
 
 ## Peticiones de compras
 @app.get("/compras/{id}")
